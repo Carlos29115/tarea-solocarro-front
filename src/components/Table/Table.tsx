@@ -1,6 +1,6 @@
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Icon } from "../Icon/Icon";
 import { SearchBar } from "./components/SearchBar/SearchBar";
 import "./table.css";
@@ -14,6 +14,7 @@ interface Post {
 const Table = () => {
   const [activeMenu, setActiveMenu] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const menuRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
 
   const { data } = useQuery({
     queryKey: ["posts"],
@@ -22,6 +23,22 @@ const Table = () => {
         res.json()
       ),
   });
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (activeMenu !== null) {
+        const activeMenuRef = menuRefs.current[activeMenu];
+        if (activeMenuRef && !activeMenuRef.contains(event.target as Node)) {
+          setActiveMenu(null);
+        }
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [activeMenu]);
 
   const handleMenuClick = (postId: number) => {
     setActiveMenu(activeMenu === postId ? null : postId);
@@ -49,22 +66,32 @@ const Table = () => {
                 <td>{post.title}</td>
                 <td>{post.body}</td>
                 <td className="actions-cell">
-                  <button
-                    className="table-container-button"
-                    onClick={() => handleMenuClick(post.id)}
-                  >
-                    <Icon icon={faEllipsis} size="1x" />
-                  </button>
-                  {activeMenu === post.id && (
-                    <div className="actions-menu">
-                      <button onClick={() => console.log("Editar", post.id)}>
-                        Editar
-                      </button>
-                      <button onClick={() => console.log("Eliminar", post.id)}>
-                        Eliminar
-                      </button>
-                    </div>
-                  )}
+                  <div ref={(el) => (menuRefs.current[post.id] = el)}>
+                    <button
+                      className="table-container-button"
+                      onClick={() => handleMenuClick(post.id)}
+                    >
+                      <Icon icon={faEllipsis} size="1x" />
+                    </button>
+                    {activeMenu === post.id && (
+                      <div className="actions-menu">
+                        <button
+                          onClick={() => {
+                            console.log("Editar", post.id);
+                            setActiveMenu(null);
+                          }}
+                        >
+                          Editar
+                        </button>
+                        <button
+                          className="actions-menu--delete"
+                          onClick={() => console.log("Eliminar", post.id)}
+                        >
+                          Eliminar
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </td>
               </tr>
             ))}
