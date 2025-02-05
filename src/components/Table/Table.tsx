@@ -81,7 +81,7 @@ const Table: React.FC<TableProps> = ({ handleModal }) => {
                       <div className="actions-menu">
                         <button
                           onClick={() => {
-                            handleModal("edit");
+                            handleModal("edit", post);
                             setActiveMenu(null);
                           }}
                         >
@@ -89,7 +89,10 @@ const Table: React.FC<TableProps> = ({ handleModal }) => {
                         </button>
                         <button
                           className="actions-menu--delete"
-                          onClick={() => handleModal("delete")}
+                          onClick={() => {
+                            handleModal("delete", post);
+                            setActiveMenu(null);
+                          }}
                         >
                           Eliminar
                         </button>

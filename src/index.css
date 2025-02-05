@@ -38,6 +38,11 @@ button {
   transition: border-color 0.25s;
 }
 
+button.primary {
+  background-color: #11876d;
+  color: white;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
@@ -66,5 +71,14 @@ h6 {
   font-weight: 250;
   src: local("proxima nova"),
     url("https://fonts.cdnfonts.com/s/27118/Mark Simonson  Proxima Nova Thin.woff")
+      format("woff");
+}
+
+@font-face {
+  font-family: "proxima nova";
+  font-style: normal;
+  font-weight: 600;
+  src: local("proxima nova"),
+    url("https://fonts.cdnfonts.com/s/27118/Mark Simonson  Proxima Nova Semibold.woff")
       format("woff");
 }

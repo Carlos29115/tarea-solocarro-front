@@ -57,11 +57,6 @@
   font-weight: 500;
 }
 
-.modal-container button.primary {
-  background-color: #11876d;
-  color: white;
-}
-
 .modal-container button.secondary {
   background-color: #e9ecef;
   color: #333;

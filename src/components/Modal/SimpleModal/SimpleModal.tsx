@@ -5,9 +5,15 @@ interface SimpleModalProps {
   title: string;
   children: React.ReactNode;
   handleModal: ModalHandlerProps["handleModal"];
+  formId: string;
 }
 
-const SimpleModal = ({ title, children, handleModal }: SimpleModalProps) => {
+const SimpleModal = ({
+  title,
+  children,
+  handleModal,
+  formId,
+}: SimpleModalProps) => {
   return (
     <div className="modal-overlay">
       <div className="modal-container">
@@ -19,7 +25,9 @@ const SimpleModal = ({ title, children, handleModal }: SimpleModalProps) => {
           <button className="secondary" onClick={() => handleModal("")}>
             Cancelar
           </button>
-          <button className="primary">Aceptar</button>
+          <button className="primary" type="submit" form={formId}>
+            Aceptar
+          </button>
         </div>
       </div>
     </div>
