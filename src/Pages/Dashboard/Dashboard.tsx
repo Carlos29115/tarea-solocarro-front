@@ -98,10 +98,10 @@ const Dashboard = () => {
   return (
     <>
       <Card>
-        <div className="flex-center header-container">
+        <div className="header-container">
           <h3>Posts</h3>
           <button className="primary" onClick={() => handleModal("add")}>
-            Add Post
+            <span className="primary-button-text">Añadir post</span>
           </button>
         </div>
         <Table handleModal={handleModal} />
@@ -109,7 +109,7 @@ const Dashboard = () => {
 
       {modal === "add" && (
         <SimpleModal
-          title="New post"
+          title="Nuevo post"
           handleModal={handleModal}
           formId="postForm"
         >
@@ -118,8 +118,8 @@ const Dashboard = () => {
             className="form-container"
             onSubmit={handleSubmit(onSubmit)}
           >
-            <TextField control={control} label="Title" name="title" />
-            <TextField control={control} label="Body" name="body" />
+            <TextField control={control} label="Titulo" name="title" />
+            <TextField control={control} label="Cuerpo" name="body" />
           </form>
         </SimpleModal>
       )}

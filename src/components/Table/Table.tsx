@@ -28,6 +28,10 @@ const Table: React.FC<TableProps> = ({ handleModal }) => {
       ),
   });
 
+  const filteredPosts = data?.filter((post: Post) =>
+    post.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (activeMenu !== null) {
@@ -51,21 +55,22 @@ const Table: React.FC<TableProps> = ({ handleModal }) => {
   return (
     <>
       <SearchBar
-        placeholder="Search"
+        placeholder="Buscar post"
         value={searchQuery}
         setSearchQuery={setSearchQuery}
       />
+
       <div className="table-container">
         <table>
           <thead>
             <tr>
-              <th>Title</th>
-              <th>Body</th>
+              <th>Titulo</th>
+              <th>Cuerpo</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
-            {data?.map((post: Post) => (
+            {filteredPosts?.map((post: Post) => (
               <tr key={post.id}>
                 <td>{post.title}</td>
                 <td>{post.body}</td>
