@@ -17,13 +17,6 @@
   position: sticky;
   top: 0;
   z-index: 1;
-  transition: top 0.3s ease-in-out;
-
-  &:after {
-    content: " ";
-    width: 100%;
-    position: absolute;
-  }
 }
 
 .table-container th {
@@ -41,8 +34,47 @@
 
 .table-container td {
   border: 1px solid #cfcfcf;
-
   border-left: none;
   border-right: none;
   padding: 15px 20px;
+}
+
+.table-container-button {
+  padding: 8px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.table-container-button:active {
+  transform: translateY(2px);
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+}
+
+.actions-cell {
+  position: relative;
+}
+
+.actions-menu {
+  position: absolute;
+  right: 30px;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.actions-menu button {
+  display: block;
+  width: 100%;
+  padding: 8px 16px;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.actions-menu button:hover {
+  background-color: #f5f5f5;
 }
