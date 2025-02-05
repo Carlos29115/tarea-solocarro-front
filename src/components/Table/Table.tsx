@@ -4,14 +4,18 @@ import { useState, useRef, useEffect } from "react";
 import { Icon } from "../Icon/Icon";
 import { SearchBar } from "./components/SearchBar/SearchBar";
 import "./table.css";
+import { ModalHandlerProps } from "../../Pages/Dashboard/Dashboard";
 
+interface TableProps {
+  handleModal: ModalHandlerProps["handleModal"];
+}
 interface Post {
   id: number;
   title: string;
   body: string;
 }
 
-const Table = () => {
+const Table: React.FC<TableProps> = ({ handleModal }) => {
   const [activeMenu, setActiveMenu] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const menuRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
@@ -77,7 +81,7 @@ const Table = () => {
                       <div className="actions-menu">
                         <button
                           onClick={() => {
-                            console.log("Editar", post.id);
+                            handleModal("edit");
                             setActiveMenu(null);
                           }}
                         >
@@ -85,7 +89,7 @@ const Table = () => {
                         </button>
                         <button
                           className="actions-menu--delete"
-                          onClick={() => console.log("Eliminar", post.id)}
+                          onClick={() => handleModal("delete")}
                         >
                           Eliminar
                         </button>

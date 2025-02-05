@@ -1,11 +1,13 @@
+import { ModalHandlerProps } from "../../../Pages/Dashboard/Dashboard";
 import "./simpleModal.css";
 
 interface SimpleModalProps {
   title: string;
   children: React.ReactNode;
+  handleModal: ModalHandlerProps["handleModal"];
 }
 
-const SimpleModal = ({ title, children }: SimpleModalProps) => {
+const SimpleModal = ({ title, children, handleModal }: SimpleModalProps) => {
   return (
     <div className="modal-overlay">
       <div className="modal-container">
@@ -14,7 +16,9 @@ const SimpleModal = ({ title, children }: SimpleModalProps) => {
         </div>
         <div className="modal-container--body">{children}</div>
         <div className="modal-container--footer">
-          <button className="secondary">Cancelar</button>
+          <button className="secondary" onClick={() => handleModal("")}>
+            Cancelar
+          </button>
           <button className="primary">Aceptar</button>
         </div>
       </div>
