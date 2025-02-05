@@ -3,6 +3,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import "./App.css";
 import Table from "./components/Table/Table";
 import Card from "./components/Card/Card";
+import SimpleModal from "./components/Modal/SimpleModal/SimpleModal";
 
 function App() {
   const queryClient = new QueryClient();
@@ -14,6 +15,7 @@ function App() {
         </div>
         <Table />
       </Card>
+      <SimpleModal title="New post">Modaaal</SimpleModal>
     </QueryClientProvider>
   );
 }
