@@ -14,7 +14,7 @@ export function SearchBar({
   placeholder = "Search...",
 }: SearchBarProps) {
   return (
-    <div className="mb-6">
+    <div className="flex-center">
       <div className="search-container">
         <input
           type="text"
