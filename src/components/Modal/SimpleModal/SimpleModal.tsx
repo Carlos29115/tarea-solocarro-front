@@ -1,5 +1,6 @@
 import { ModalHandlerProps } from "../../../Pages/Dashboard/Dashboard";
 import "./simpleModal.css";
+import { ModalAction } from "./simpleMotalTypes";
 
 interface SimpleModalProps {
   title: string;
@@ -22,7 +23,10 @@ const SimpleModal = ({
         </div>
         <div className="modal-container--body">{children}</div>
         <div className="modal-container--footer">
-          <button className="secondary" onClick={() => handleModal("")}>
+          <button
+            className="secondary"
+            onClick={() => handleModal(ModalAction.NONE)}
+          >
             Cancelar
           </button>
           <button className="primary" type="submit" form={formId}>

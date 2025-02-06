@@ -7,8 +7,7 @@ import Table from "../../components/Table/Table";
 import TextField from "../../components/TextField/TextField";
 import "./dashboard.css";
 import toast from "react-hot-toast";
-
-type ModalAction = "" | "add" | "edit" | "delete";
+import { ModalAction } from "../../components/Modal/SimpleModal/simpleMotalTypes";
 
 export interface ModalHandlerProps {
   handleModal: (action: ModalAction, post?: FormData) => void;
@@ -21,7 +20,7 @@ interface FormData {
 }
 
 const Dashboard = () => {
-  const [modal, setModal] = useState("");
+  const [modal, setModal] = useState<ModalAction>(ModalAction.NONE);
   const [httpMethod, setHttpMethod] = useState<"POST" | "PUT" | "DELETE">(
     "POST"
   );
@@ -49,42 +48,46 @@ const Dashboard = () => {
 
       return response.json();
     },
+
     onSuccess: () => {
-      setModal("");
+      setModal(ModalAction.NONE);
       queryClient.invalidateQueries({ queryKey: ["posts"] });
-      toast.success(
-        `Los datos se ${
-          httpMethod === "POST"
-            ? "guardaron"
-            : httpMethod === "PUT"
-            ? "editaron"
-            : "eliminaron"
-        } perfectamente!`
-      );
+      const messages = {
+        POST: "guardaron",
+        PUT: "editaron",
+        DELETE: "eliminaron",
+      };
+      toast.success(`Los datos se ${messages[httpMethod]} perfectamente!`);
       setHttpMethod("POST");
     },
     onError: (error) => {
-      console.error(error);
+      toast.error(
+        `Error: ${
+          error.message === "Failed to fetch"
+            ? "Error de conexion"
+            : "Ha ocurrido un error"
+        }`
+      );
+      console.log(error.message);
     },
   });
 
   const handleModal = (action: ModalAction, post?: FormData) => {
-    if (action === "edit" && post) {
+    if (action === ModalAction.EDIT && post) {
       setHttpMethod("PUT");
       reset({
         id: post.id,
-
         title: post.title,
         body: post.body,
       });
-    } else if (action === "delete" && post) {
+    } else if (action === ModalAction.DELETE && post) {
       setHttpMethod("DELETE");
       reset({
         id: post.id,
         title: post.title,
         body: post.body,
       });
-    } else if (action === "add") {
+    } else if (action === ModalAction.ADD) {
       setHttpMethod("POST");
       reset({
         title: "",
@@ -103,52 +106,40 @@ const Dashboard = () => {
       <Card>
         <div className="header-container">
           <h3>Posts</h3>
-          <button className="primary" onClick={() => handleModal("add")}>
+          <button
+            className="primary"
+            onClick={() => handleModal(ModalAction.ADD)}
+          >
             <span className="primary-button-text">Añadir post</span>
           </button>
         </div>
         <Table handleModal={handleModal} />
       </Card>
 
-      {modal === "add" && (
+      {modal !== ModalAction.NONE && (
         <SimpleModal
-          title="Nuevo post"
+          title={
+            modal === ModalAction.ADD
+              ? "Nuevo post"
+              : modal === ModalAction.EDIT
+              ? "Editar post"
+              : "Eliminar post"
+          }
           handleModal={handleModal}
-          formId="postForm"
+          formId={`${modal}Form`}
         >
-          <form
-            id="postForm"
-            className="form-container"
-            onSubmit={handleSubmit(onSubmit)}
-          >
-            <TextField control={control} label="Titulo" name="title" />
-            <TextField control={control} label="Cuerpo" name="body" />
-          </form>
-        </SimpleModal>
-      )}
-      {modal === "edit" && (
-        <SimpleModal
-          title="Edit post"
-          handleModal={handleModal}
-          formId="editForm"
-        >
-          <form
-            id="editForm"
-            className="form-container"
-            onSubmit={handleSubmit(onSubmit)}
-          >
-            <TextField control={control} label="Title" name="title" />
-            <TextField control={control} label="Body" name="body" />
-          </form>
-        </SimpleModal>
-      )}
-      {modal === "delete" && (
-        <SimpleModal
-          title="Eliminar post"
-          handleModal={handleModal}
-          formId="deleteForm"
-        >
-          <span>¿Estás seguro de querer eliminar este post?</span>
+          {modal === ModalAction.DELETE ? (
+            <span>¿Estás seguro de querer eliminar este post?</span>
+          ) : (
+            <form
+              id={`${modal}Form`}
+              className="form-container"
+              onSubmit={handleSubmit(onSubmit)}
+            >
+              <TextField control={control} label="Título" name="title" />
+              <TextField control={control} label="Contenido" name="body" />
+            </form>
+          )}
         </SimpleModal>
       )}
     </>

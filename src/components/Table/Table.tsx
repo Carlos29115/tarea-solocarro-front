@@ -5,6 +5,8 @@ import { ModalHandlerProps } from "../../Pages/Dashboard/Dashboard";
 import { Icon } from "../Icon/Icon";
 import { SearchBar } from "./components/SearchBar/SearchBar";
 import "./table.css";
+import { ModalAction } from "../Modal/SimpleModal/simpleMotalTypes";
+import toast from "react-hot-toast";
 
 interface TableProps {
   handleModal: ModalHandlerProps["handleModal"];
@@ -19,15 +21,23 @@ const Table: React.FC<TableProps> = ({ handleModal }) => {
   const [activeMenu, setActiveMenu] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10; // Puedes ajustar este número según necesites
+  const itemsPerPage = 10;
   const menuRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
 
   const { data } = useQuery({
     queryKey: ["posts"],
     queryFn: () =>
-      fetch("https://jsonplaceholder.typicode.com/posts").then((res) =>
-        res.json()
-      ),
+      fetch("https://jsonplaceholder.typicode.com/posts")
+        .then((res) => res.json())
+        .catch((error) => {
+          toast.error(
+            `Error: ${
+              error.message === "Failed to fetch"
+                ? "Error de conexion"
+                : "Ha ocurrido un error"
+            }`
+          );
+        }),
   });
 
   const filteredPosts = data?.filter((post: Post) =>
@@ -93,7 +103,7 @@ const Table: React.FC<TableProps> = ({ handleModal }) => {
                       <div className="actions-menu">
                         <button
                           onClick={() => {
-                            handleModal("edit", post);
+                            handleModal(ModalAction.EDIT, post);
                             setActiveMenu(null);
                           }}
                         >
@@ -102,7 +112,7 @@ const Table: React.FC<TableProps> = ({ handleModal }) => {
                         <button
                           className="actions-menu--delete"
                           onClick={() => {
-                            handleModal("delete", post);
+                            handleModal(ModalAction.DELETE, post);
                             setActiveMenu(null);
                           }}
                         >
