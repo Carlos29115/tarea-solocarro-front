@@ -24,7 +24,7 @@ const Table: React.FC<TableProps> = ({ handleModal }) => {
   const itemsPerPage = 10;
   const menuRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
 
-  const { data } = useQuery({
+  const { data, error, isLoading } = useQuery({
     queryKey: ["posts"],
     queryFn: () =>
       fetch("https://jsonplaceholder.typicode.com/posts")
@@ -78,55 +78,69 @@ const Table: React.FC<TableProps> = ({ handleModal }) => {
       />
 
       <div className="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Titulo</th>
-              <th>Cuerpo</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentItems?.map((post: Post) => (
-              <tr key={post.id}>
-                <td>{post.title}</td>
-                <td>{post.body}</td>
-                <td className="actions-cell">
-                  <div ref={(el) => (menuRefs.current[post.id] = el)}>
-                    <button
-                      className="table-container-button"
-                      onClick={() => handleMenuClick(post.id)}
-                    >
-                      <Icon icon={faEllipsis} size="1x" />
-                    </button>
-                    {activeMenu === post.id && (
-                      <div className="actions-menu">
-                        <button
-                          onClick={() => {
-                            handleModal(ModalAction.EDIT, post);
-                            setActiveMenu(null);
-                          }}
-                        >
-                          Editar
-                        </button>
-                        <button
-                          className="actions-menu--delete"
-                          onClick={() => {
-                            handleModal(ModalAction.DELETE, post);
-                            setActiveMenu(null);
-                          }}
-                        >
-                          Eliminar
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </td>
+        {currentItems?.length > 0 ? (
+          <table>
+            <thead>
+              <tr>
+                <th>Titulo</th>
+
+                <th>Cuerpo</th>
+                <th></th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {currentItems?.map((post: Post) => (
+                <tr key={post.id}>
+                  <td>{post.title}</td>
+                  <td>{post.body}</td>
+                  <td className="actions-cell">
+                    <div ref={(el) => (menuRefs.current[post.id] = el)}>
+                      <button
+                        className="table-container-button"
+                        onClick={() => handleMenuClick(post.id)}
+                      >
+                        <Icon icon={faEllipsis} size="1x" />
+                      </button>
+                      {activeMenu === post.id && (
+                        <div className="actions-menu">
+                          <button
+                            onClick={() => {
+                              handleModal(ModalAction.EDIT, post);
+                              setActiveMenu(null);
+                            }}
+                          >
+                            Editar
+                          </button>
+                          <button
+                            className="actions-menu--delete"
+                            onClick={() => {
+                              handleModal(ModalAction.DELETE, post);
+                              setActiveMenu(null);
+                            }}
+                          >
+                            Eliminar
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <div className="table-container-empty">
+            <p>
+              {isLoading
+                ? "Cargando..."
+                : error
+                ? "Ha ocurrido un error, por favor intente nuevamente"
+                : "No hay posts, agrega uno nuevo!"}
+            </p>
+          </div>
+        )}
       </div>
+
       <div className="pagination-controls">
         <button
           onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
