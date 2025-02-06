@@ -18,6 +18,8 @@ interface Post {
 const Table: React.FC<TableProps> = ({ handleModal }) => {
   const [activeMenu, setActiveMenu] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10; // Puedes ajustar este número según necesites
   const menuRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
 
   const { data } = useQuery({
@@ -31,6 +33,11 @@ const Table: React.FC<TableProps> = ({ handleModal }) => {
   const filteredPosts = data?.filter((post: Post) =>
     post.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const totalPages = Math.ceil((filteredPosts?.length || 0) / itemsPerPage);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredPosts?.slice(indexOfFirstItem, indexOfLastItem);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -70,7 +77,7 @@ const Table: React.FC<TableProps> = ({ handleModal }) => {
             </tr>
           </thead>
           <tbody>
-            {filteredPosts?.map((post: Post) => (
+            {currentItems?.map((post: Post) => (
               <tr key={post.id}>
                 <td>{post.title}</td>
                 <td>{post.body}</td>
@@ -109,6 +116,27 @@ const Table: React.FC<TableProps> = ({ handleModal }) => {
             ))}
           </tbody>
         </table>
+      </div>
+      <div className="pagination-controls">
+        <button
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}
+        >
+          Anterior
+        </button>
+
+        <span>
+          Página {currentPage} de {totalPages}
+        </span>
+
+        <button
+          onClick={() =>
+            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+          }
+          disabled={currentPage === totalPages}
+        >
+          Siguiente
+        </button>
       </div>
     </>
   );

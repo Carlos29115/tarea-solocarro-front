@@ -1,7 +1,8 @@
 .table-container {
+  border: 1px solid #d2d6da;
   border-radius: 4px;
   overflow-x: auto;
-  overflow-y: hidden;
+  overflow-y: auto;
   width: 100%;
   height: 100%;
 }
@@ -9,21 +10,23 @@
 .table-container table {
   width: 100%;
   height: 100%;
-  border: 1px solid #d2d6da;
   border-collapse: collapse;
 }
-
-/* ... existing code ... */
-.table-container table tr:nth-child(n + 10) {
-  display: none; /* Oculta todos los elementos a partir del quinto */
-}
-/* ... existing code ... */
 
 .table-container thead {
   background-color: #fafbfc;
   position: sticky;
   top: 0;
   z-index: 1;
+  &:after {
+    content: " ";
+    width: 100%;
+    position: absolute;
+    height: 1px;
+    background-color: #d2d6da;
+    bottom: 0;
+    left: 0;
+  }
 }
 
 .table-container th {
@@ -88,4 +91,30 @@
 
 .actions-menu--delete {
   color: red;
+}
+
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding: 1rem;
+}
+
+.pagination-controls button {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.pagination-controls button:disabled {
+  background-color: #f0f0f0;
+  cursor: not-allowed;
+}
+
+.pagination-controls span {
+  font-size: 0.9rem;
 }
