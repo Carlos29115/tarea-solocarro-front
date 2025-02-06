@@ -126,14 +126,14 @@ const Table: React.FC<TableProps> = ({ handleModal }) => {
         </button>
 
         <span>
-          Página {currentPage} de {totalPages}
+          Página {currentPage} de {totalPages === 0 ? 1 : totalPages}
         </span>
 
         <button
           onClick={() =>
             setCurrentPage((prev) => Math.min(prev + 1, totalPages))
           }
-          disabled={currentPage === totalPages}
+          disabled={currentPage >= totalPages}
         >
           Siguiente
         </button>
