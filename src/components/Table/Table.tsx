@@ -1,10 +1,10 @@
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import { useQuery } from "@tanstack/react-query";
-import { useState, useRef, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
+import { ModalHandlerProps } from "../../Pages/Dashboard/Dashboard";
 import { Icon } from "../Icon/Icon";
 import { SearchBar } from "./components/SearchBar/SearchBar";
 import "./table.css";
-import { ModalHandlerProps } from "../../Pages/Dashboard/Dashboard";
 
 interface TableProps {
   handleModal: ModalHandlerProps["handleModal"];

@@ -6,6 +6,7 @@ import SimpleModal from "../../components/Modal/SimpleModal/SimpleModal";
 import Table from "../../components/Table/Table";
 import TextField from "../../components/TextField/TextField";
 import "./dashboard.css";
+import toast from "react-hot-toast";
 
 type ModalAction = "" | "add" | "edit" | "delete";
 
@@ -46,19 +47,21 @@ const Dashboard = () => {
         },
       });
 
-      if (!response.ok) {
-        throw new Error(
-          httpMethod === "PUT"
-            ? "Error al editar el post"
-            : "Error al agregar el post"
-        );
-      }
       return response.json();
     },
     onSuccess: () => {
       setModal("");
-      setHttpMethod("POST");
       queryClient.invalidateQueries({ queryKey: ["posts"] });
+      toast.success(
+        `Los datos se ${
+          httpMethod === "POST"
+            ? "guardaron"
+            : httpMethod === "PUT"
+            ? "editaron"
+            : "eliminaron"
+        } perfectamente!`
+      );
+      setHttpMethod("POST");
     },
     onError: (error) => {
       console.error(error);
