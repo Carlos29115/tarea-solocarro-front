@@ -108,6 +108,7 @@
   border-radius: 4px;
   background-color: #fff;
   cursor: pointer;
+  box-sizing: content-box;
 }
 
 .pagination-controls button:disabled {
@@ -117,4 +118,10 @@
 
 .pagination-controls span {
   font-size: 0.9rem;
+}
+
+@media screen and (max-width: 425px) {
+  .pagination-controls {
+    padding: 0;
+  }
 }

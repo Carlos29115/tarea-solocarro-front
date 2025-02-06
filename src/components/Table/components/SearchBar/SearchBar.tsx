@@ -14,7 +14,7 @@ export function SearchBar({
   placeholder = "Search...",
 }: SearchBarProps) {
   return (
-    <div>
+    <div className="search-container-wrapper">
       <div className="search-container">
         <input
           type="text"

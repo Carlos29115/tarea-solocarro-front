@@ -3,6 +3,10 @@
   width: 300px;
 }
 
+.search-container-wrapper {
+  display: flex;
+}
+
 .search-input {
   width: 100%;
   padding: 15px 15px 15px 40px;
@@ -25,4 +29,19 @@
   top: 50%;
   transform: translateY(-50%);
   color: #666;
+}
+
+@media screen and (max-width: 425px) {
+  .search-container {
+    width: 100%;
+    display: flex;
+  }
+
+  .search-input {
+    padding: 15px;
+  }
+
+  .search-icon {
+    display: none;
+  }
 }
